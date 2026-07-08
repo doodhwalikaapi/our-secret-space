@@ -44,14 +44,18 @@ app.get('/api/items', async (req, res) => {
       .max_results(200)
       .execute();
 
-    const items = result.resources.map(r => ({
-      id: r.public_id,
-      url: r.secure_url,
-      type: r.resource_type === 'video' ? 'video' : 'image',
-      uploader: (r.context?.custom?.uploader) || 'someone',
-      caption: (r.context?.custom?.caption) || '',
-      uploadedAt: new Date(r.created_at).getTime()
-    }));
+    const items = result.resources.map(r => {
+      const ctx = r.context || {};
+      const custom = ctx.custom || ctx; // Cloudinary sometimes nests under "custom", sometimes not
+      return {
+        id: r.public_id,
+        url: r.secure_url,
+        type: r.resource_type === 'video' ? 'video' : 'image',
+        uploader: custom.uploader || 'someone',
+        caption: custom.caption || '',
+        uploadedAt: new Date(r.created_at).getTime()
+      };
+    });
     res.json(items);
   } catch (err) {
     console.error(err);

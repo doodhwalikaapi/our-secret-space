@@ -206,7 +206,7 @@ button#submitBtn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; 
   position: absolute;
   width: 8px;
   height: 11px;
-  background: var(--white);
+  background: #d9c2e0;
   border-radius: 50%;
   top: 50%;
   left: 50%;
